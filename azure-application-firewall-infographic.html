@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure Application Firewall Interactive Infographic</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f7f9fc;
+            color: #323130;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #0078d4;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .firewall-diagram {
+            position: relative;
+            height: 600px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .component {
+            position: absolute;
+            background-color: #fff;
+            border: 2px solid #0078d4;
+            border-radius: 8px;
+            padding: 10px;
+            width: 150px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+        .component:hover {
+            box-shadow: 0 0 15px rgba(0, 120, 212, 0.5);
+            transform: translateY(-5px);
+        }
+        .component h3 {
+            margin: 0 0 8px 0;
+            font-size: 14px;
+            color: #0078d4;
+        }
+        .component-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: #0078d4;
+        }
+        .connection {
+            position: absolute;
+            background-color: #0078d4;
+            z-index: 1;
+        }
+        .info-panel {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            display: none;
+        }
+        .info-panel h2 {
+            color: #0078d4;
+            margin-top: 0;
+        }
+        .info-panel p {
+            line-height: 1.6;
+        }
+        .info-panel ul {
+            padding-left: 20px;
+        }
+        .info-panel li {
+            margin-bottom: 8px;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #0078d4;
+        }
+        .highlight {
+            background-color: #e6f2fa;
+            border-color: #0078d4;
+            box-shadow: 0 0 15px rgba(0, 120, 212, 0.5);
+        }
+        .legend {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 0 15px 10px 15px;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            border-radius: 4px;
+        }
+        .traffic-animation {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #ffb900;
+            z-index: 3;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Azure Application Firewall: How Components Work Together</h1>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #0078d4;"></div>
+                <span>Core Components</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #107c10;"></div>
+                <span>Security Features</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #5c2d91;"></div>
+                <span>Management</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #d83b01;"></div>
+                <span>Traffic Flow</span>
+            </div>
+        </div>
+        
+        <div class="firewall-diagram" id="diagram">
+            <!-- Components will be added via JavaScript -->
+            
+            <!-- Traffic Animation Elements -->
+            <div class="traffic-animation" id="traffic1"></div>
+            <div class="traffic-animation" id="traffic2"></div>
+            <div class="traffic-animation" id="traffic3"></div>
+        </div>
+        
+        <div class="info-panel" id="infoPanel">
+            <button class="close-btn" id="closeBtn">×</button>
+            <h2 id="infoTitle">Component Title</h2>
+            <div id="infoContent">Component description will appear here.</div>
+        </div>
+    </div>
+
+    <script>
+        // Component Definitions
+        const components = [
+            {
+                id: 'internet',
+                name: 'Internet / External Traffic',
+                icon: '🌐',
+                x: 100,
+                y: 50,
+                color: '#0078d4',
+                description: `
+                    <p>The external source of traffic that comes into your Azure environment.</p>
+                    <ul>
+                        <li>Users accessing your applications</li>
+                        <li>API requests from external systems</li>
+                        <li>Potential malicious traffic that needs to be filtered</li>
+                    </ul>
+                    <p>Azure Application Firewall acts as a protective barrier between this external traffic and your backend applications.</p>
+                `
+            },
+            {
+                id: 'waf',
+                name: 'WAF Policies',
+                icon: '🛡️',
+                x: 300,
+                y: 110,
+                color: '#107c10',
+                description: `
+                    <p>Web Application Firewall (WAF) policies define advanced protection against web vulnerabilities.</p>
+                    <ul>
+                        <li><strong>OWASP Rule Sets:</strong> Protects against top web application vulnerabilities</li>
+                        <li><strong>Custom Rules:</strong> Create specific rules based on your application needs</li>
+                        <li><strong>Bot Protection:</strong> Detect and block malicious bots</li>
+                        <li><strong>Prevention/Detection Modes:</strong> Run in monitoring or active prevention mode</li>
+                    </ul>
+                    <p>WAF policies help protect your web applications from common exploits like SQL injection, cross-site scripting (XSS), and other OWASP Top 10 vulnerabilities.</p>
+                `
+            },
+            {
+                id: 'firewall',
+                name: 'Application Firewall',
+                icon: '🔥',
+                x: 500,
+                y: 200,
+                color: '#0078d4',
+                description: `
+                    <p>The core Azure Application Firewall service that processes and filters all incoming traffic.</p>
+                    <ul>
+                        <li><strong>Stateful Inspection:</strong> Tracks the state of network connections</li>
+                        <li><strong>High Availability:</strong> Built-in redundancy and auto-scaling</li>
+                        <li><strong>PaaS Service:</strong> Fully managed by Microsoft Azure</li>
+                        <li><strong>Integration:</strong> Works with Azure Application Gateway or as a standalone service</li>
+                    </ul>
+                    <p>The Application Firewall applies all configured rule sets, policies, and filtering configurations to protect your applications.</p>
+                `
+            },
+            {
+                id: 'rules',
+                name: 'Rule Sets',
+                icon: '📋',
+                x: 700,
+                y: 110,
+                color: '#107c10',
+                description: `
+                    <p>Application Firewall Rule Sets define what traffic is allowed or denied.</p>
+                    <ul>
+                        <li><strong>Network Rules:</strong> Control traffic based on source IP, destination IP, port, and protocol</li>
+                        <li><strong>Application Rules:</strong> Filter by FQDN, URL, HTTP methods</li>
+                        <li><strong>NAT Rules:</strong> Configure inbound DNAT for specific network traffic</li>
+                        <li><strong>TLS Inspection:</strong> Inspect encrypted traffic for threats</li>
+                    </ul>
+                    <p>Rules can be configured in deny or allow mode, with deny mode being the recommended secure approach where only specified traffic is allowed.</p>
+                `
+            },
+            {
+                id: 'monitoring',
+                name: 'Monitoring & Logs',
+                icon: '📊',
+                x: 300,
+                y: 300,
+                color: '#5c2d91',
+                description: `
+                    <p>Comprehensive monitoring and logging capabilities for the Application Firewall.</p>
+                    <ul>
+                        <li><strong>Azure Monitor:</strong> Real-time metrics and alerts</li>
+                        <li><strong>Diagnostic Logs:</strong> Detailed logs for rule matches, threats detected</li>
+                        <li><strong>Log Analytics:</strong> Advanced query and analysis</li>
+                        <li><strong>Security Center Integration:</strong> Centralized security monitoring</li>
+                    </ul>
+                    <p>Logging and monitoring are essential for identifying potential threats, troubleshooting issues, and ensuring compliance with security policies.</p>
+                `
+            },
+            {
+                id: 'policy',
+                name: 'Firewall Policy',
+                icon: '📜',
+                x: 500,
+                y: 400,
+                color: '#5c2d91',
+                description: `
+                    <p>Centralized management configuration that defines the overall behavior of the Application Firewall.</p>
+                    <ul>
+                        <li><strong>Hierarchical Policies:</strong> Create parent and child policies for organizational needs</li>
+                        <li><strong>Centralized Management:</strong> Apply consistent policies across multiple firewalls</li>
+                        <li><strong>Integration:</strong> Connect WAF policies, rule groups, and threat intelligence</li>
+                        <li><strong>IDPS Configuration:</strong> Define intrusion detection and prevention settings</li>
+                    </ul>
+                    <p>Firewall policies allow for consistent security enforcement across your Azure environment.</p>
+                `
+            },
+            {
+                id: 'backend',
+                name: 'Backend Services',
+                icon: '🖥️',
+                x: 700,
+                y: 300,
+                color: '#0078d4',
+                description: `
+                    <p>The protected applications and services that the Application Firewall is defending.</p>
+                    <ul>
+                        <li><strong>Web Applications:</strong> Azure App Services, API Management</li>
+                        <li><strong>Virtual Machines:</strong> Application servers running on VMs</li>
+                        <li><strong>Containers:</strong> AKS and container-based applications</li>
+                        <li><strong>PaaS Services:</strong> Other Azure platform services</li>
+                    </ul>
+                    <p>These are the actual business applications and services that process legitimate requests after they've been filtered by the firewall.</p>
+                `
+            },
+            {
+                id: 'threatIntel',
+                name: 'Threat Intelligence',
+                icon: '🔍',
+                x: 700,
+                y: 500,
+                color: '#107c10',
+                description: `
+                    <p>Microsoft's integrated threat intelligence capabilities that enhance the firewall's protection.</p>
+                    <ul>
+                        <li><strong>IP Reputation Filtering:</strong> Block known malicious IP addresses</li>
+                        <li><strong>Microsoft Threat Intelligence:</strong> Continuously updated threat data</li>
+                        <li><strong>Malware Detection:</strong> Identify and block malicious software</li>
+                        <li><strong>Botnet C&C Protection:</strong> Block communications with command and control servers</li>
+                    </ul>
+                    <p>Threat intelligence provides real-time protection against emerging threats and known malicious actors.</p>
+                `
+            },
+            {
+                id: 'idps',
+                name: 'IDPS',
+                icon: '👁️',
+                x: 500,
+                y: 500,
+                color: '#107c10',
+                description: `
+                    <p>Intrusion Detection and Prevention System capabilities within Azure Application Firewall.</p>
+                    <ul>
+                        <li><strong>Signature-Based Detection:</strong> Identifies known attack patterns</li>
+                        <li><strong>Protocol Anomaly Detection:</strong> Identifies unusual protocol behaviors</li>
+                        <li><strong>Alert Mode:</strong> Monitor and log suspicious activity</li>
+                        <li><strong>Prevention Mode:</strong> Actively block detected intrusions</li>
+                    </ul>
+                    <p>IDPS provides an additional layer of security by monitoring network traffic for suspicious activities and potential intrusions.</p>
+                `
+            },
+            {
+                id: 'tls',
+                name: 'TLS Inspection',
+                icon: '🔒',
+                x: 300,
+                y: 500,
+                color: '#107c10',
+                description: `
+                    <p>Allows the firewall to inspect encrypted HTTPS traffic for threats.</p>
+                    <ul>
+                        <li><strong>TLS Termination:</strong> Decrypt and inspect encrypted traffic</li>
+                        <li><strong>Certificate Management:</strong> Handle SSL/TLS certificates</li>
+                        <li><strong>Re-encryption:</strong> Re-encrypt traffic before sending to backends</li>
+                        <li><strong>Protocol Enforcement:</strong> Ensure secure TLS versions are used</li>
+                    </ul>
+                    <p>TLS inspection is crucial for identifying threats that might be hidden within encrypted traffic, while maintaining end-to-end encryption for legitimate traffic.</p>
+                `
+            },
+            {
+                id: 'vnet',
+                name: 'Virtual Network',
+                icon: '🌐',
+                x: 100,
+                y: 300,
+                color: '#0078d4',
+                description: `
+                    <p>The Azure Virtual Network infrastructure that hosts the Application Firewall and protected resources.</p>
+                    <ul>
+                        <li><strong>Network Isolation:</strong> Secure boundary for your Azure resources</li>
+                        <li><strong>Subnets:</strong> Segmentation for different application tiers</li>
+                        <li><strong>NSGs:</strong> Additional layer of network security</li>
+                        <li><strong>Routing:</strong> Traffic flow control within your environment</li>
+                    </ul>
+                    <p>The Virtual Network provides the foundation for secure network connectivity between the Application Firewall and your backend services.</p>
+                `
+            }
+        ];
+
+        // Connection Definitions (source, target)
+        const connections = [
+            { from: 'internet', to: 'firewall', flow: true },
+            { from: 'waf', to: 'firewall' },
+            { from: 'rules', to: 'firewall' },
+            { from: 'firewall', to: 'backend', flow: true },
+            { from: 'monitoring', to: 'firewall' },
+            { from: 'policy', to: 'firewall' },
+            { from: 'policy', to: 'waf' },
+            { from: 'policy', to: 'rules' },
+            { from: 'policy', to: 'idps' },
+            { from: 'policy', to: 'tls' },
+            { from: 'threatIntel', to: 'firewall' },
+            { from: 'idps', to: 'firewall' },
+            { from: 'tls', to: 'firewall' },
+            { from: 'vnet', to: 'firewall' }
+        ];
+
+        // Function to draw the components
+        function drawComponents() {
+            const diagram = document.getElementById('diagram');
+            
+            // Create components
+            components.forEach(comp => {
+                const componentElement = document.createElement('div');
+                componentElement.id = comp.id;
+                componentElement.className = 'component';
+                componentElement.style.left = `${comp.x}px`;
+                componentElement.style.top = `${comp.y}px`;
+                componentElement.style.borderColor = comp.color;
+                
+                componentElement.innerHTML = `
+                    <div class="component-icon">${comp.icon}</div>
+                    <h3>${comp.name}</h3>
+                `;
+                
+                componentElement.addEventListener('click', () => showInfo(comp));
+                
+                diagram.appendChild(componentElement);
+            });
+            
+            // Draw connections
+            drawConnections();
+        }
+
+        // Function to draw connections between components
+        function drawConnections() {
+            const diagram = document.getElementById('diagram');
+            
+            connections.forEach(conn => {
+                const fromElement = document.getElementById(conn.from);
+                const toElement = document.getElementById(conn.to);
+                
+                if (fromElement && toElement) {
+                    const fromRect = fromElement.getBoundingClientRect();
+                    const toRect = toElement.getBoundingClientRect();
+                    
+                    const fromCenterX = fromElement.offsetLeft + fromElement.offsetWidth / 2;
+                    const fromCenterY = fromElement.offsetTop + fromElement.offsetHeight / 2;
+                    const toCenterX = toElement.offsetLeft + toElement.offsetWidth / 2;
+                    const toCenterY = toElement.offsetTop + toElement.offsetHeight / 2;
+                    
+                    const angle = Math.atan2(toCenterY - fromCenterY, toCenterX - fromCenterX);
+                    const length = Math.sqrt(Math.pow(toCenterX - fromCenterX, 2) + Math.pow(toCenterY - fromCenterY, 2));
+                    
+                    const connectionElement = document.createElement('div');
+                    connectionElement.className = 'connection';
+                    connectionElement.style.width = `${length}px`;
+                    connectionElement.style.height = '2px';
+                    connectionElement.style.left = `${fromCenterX}px`;
+                    connectionElement.style.top = `${fromCenterY}px`;
+                    connectionElement.style.transformOrigin = '0 0';
+                    connectionElement.style.transform = `rotate(${angle}rad)`;
+                    
+                    // Add data attributes for animation
+                    if (conn.flow) {
+                        connectionElement.setAttribute('data-flow', 'true');
+                        connectionElement.setAttribute('data-from-x', fromCenterX);
+                        connectionElement.setAttribute('data-from-y', fromCenterY);
+                        connectionElement.setAttribute('data-to-x', toCenterX);
+                        connectionElement.setAttribute('data-to-y', toCenterY);
+                        connectionElement.setAttribute('data-angle', angle);
+                        connectionElement.setAttribute('data-length', length);
+                    }
+                    
+                    diagram.appendChild(connectionElement);
+                }
+            });
+        }
+
+        // Function to show component information
+        function showInfo(component) {
+            const infoPanel = document.getElementById('infoPanel');
+            const infoTitle = document.getElementById('infoTitle');
+            const infoContent = document.getElementById('infoContent');
+            
+            infoTitle.textContent = component.name;
+            infoContent.innerHTML = component.description;
+            
+            infoPanel.style.display = 'block';
+            
+            // Highlight related components
+            highlightRelatedComponents(component.id);
+        }
+
+        // Function to highlight related components
+        function highlightRelatedComponents(componentId) {
+            // Reset all highlights
+            components.forEach(comp => {
+                const element = document.getElementById(comp.id);
+                if (element) {
+                    element.classList.remove('highlight');
+                }
+            });
+            
+            // Highlight the selected component
+            const selectedElement = document.getElementById(componentId);
+            if (selectedElement) {
+                selectedElement.classList.add('highlight');
+            }
+            
+            // Find and highlight related components
+            connections.forEach(conn => {
+                if (conn.from === componentId) {
+                    const toElement = document.getElementById(conn.to);
+                    if (toElement) {
+                        toElement.classList.add('highlight');
+                    }
+                } else if (conn.to === componentId) {
+                    const fromElement = document.getElementById(conn.from);
+                    if (fromElement) {
+                        fromElement.classList.add('highlight');
+                    }
+                }
+            });
+        }
+
+        // Close the info panel
+        document.getElementById('closeBtn').addEventListener('click', function() {
+            document.getElementById('infoPanel').style.display = 'none';
+            
+            // Remove all highlights
+            components.forEach(comp => {
+                const element = document.getElementById(comp.id);
+                if (element) {
+                    element.classList.remove('highlight');
+                }
+            });
+        });
+
+        // Animate traffic flow
+        function animateTraffic() {
+            const flowConnections = Array.from(document.querySelectorAll('.connection[data-flow="true"]'));
+            
+            flowConnections.forEach((connection, index) => {
+                const fromX = parseFloat(connection.getAttribute('data-from-x'));
+                const fromY = parseFloat(connection.getAttribute('data-from-y'));
+                const toX = parseFloat(connection.getAttribute('data-to-x'));
+                const toY = parseFloat(connection.getAttribute('data-to-y'));
+                const angle = parseFloat(connection.getAttribute('data-angle'));
+                const length = parseFloat(connection.getAttribute('data-length'));
+                
+                const trafficElement = document.getElementById(`traffic${index + 1}`);
+                trafficElement.style.display = 'block';
+                
+                // Animate the traffic dot along the connection line
+                function animate(progress) {
+                    const currentX = fromX + Math.cos(angle) * length * progress;
+                    const currentY = fromY + Math.sin(angle) * length * progress;
+                    
+                    trafficElement.style.left = `${currentX - 5}px`;
+                    trafficElement.style.top = `${currentY - 5}px`;
+                    
+                    if (progress < 1) {
+                        setTimeout(() => animate(progress + 0.01), 20);
+                    } else {
+                        setTimeout(() => animate(0), 500); // Reset and repeat
+                    }
+                }
+                
+                // Start the animation with a delay based on the index
+                setTimeout(() => animate(0), index * 1000);
+            });
+        }
+
+        // Initialize the diagram
+        window.onload = function() {
+            drawComponents();
+            setTimeout(animateTraffic, 1000);
+        };
+    </script>
+</body>
+</html>
