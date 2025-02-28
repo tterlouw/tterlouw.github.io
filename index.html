@@ -9,25 +9,59 @@
 <body>
     <div class="container">
         <h1>Azure Fundament Infrastructure</h1>
+        <div class="controls">
+            <button id="expand-all">Expand All</button>
+            <button id="collapse-all">Collapse All</button>
+        </div>
         <div id="infographic">
             <div class="section" id="azure-fundament">
                 <h2>Azure Fundament</h2>
                 <p>This section covers the core components of the Azure Fundament. It includes the following:</p>
                 <ul>
-                    <li>Documentation</li>
-                    <li>Source Code (.src)</li>
-                    <li>Extensions</li>
+                    <li><a href="#docs">Documentation</a></li>
+                    <li><a href="#src">Source Code (.src)</a></li>
+                    <li><a href="#ext">Extensions</a></li>
                     <li><a href="#">Backlog Template</a></li>
                 </ul>
+                <div class="description">
+                    <p>The Azure Fundament provides the core infrastructure for Azure deployments. It includes documentation, source code, and extensions that can be used to deploy and manage Azure resources.</p>
+                </div>
             </div>
+            
+            <div class="section" id="docs">
+                <h2>Documentation</h2>
+                <ul>
+                    <li><a href="#">Azure Design</a></li>
+                    <li><a href="#">General Information</a></li>
+                    <li><a href="#">CAF Agreements</a></li>
+                    <li><a href="#">The Azure Fundament</a></li>
+                    <li><a href="#">Workshop-Azure-Fundament</a></li>
+                </ul>
+            </div>
+            
             <div class="section" id="src">
                 <h2>.src</h2>
                 <p>This section covers the source code structure.</p>
                 <ul>
-                    <li><a href="#">Pipelines</a></li>
+                    <li><a href="#pipelines">Pipelines</a></li>
                     <li><a href="#">workloadPipelineTemplate</a></li>
                 </ul>
+                <div class="description">
+                    <p>The source code includes pipelines and templates for deploying Azure resources.</p>
+                </div>
             </div>
+            
+            <div class="section" id="pipelines">
+                <h2>Pipelines</h2>
+                <ul>
+                    <li><a href="#">Pipeline YAML Files</a></li>
+                    <li><a href="#">configs</a></li>
+                    <li><a href="#">scripts</a></li>
+                    <li><a href="#">templates</a></li>
+                    <li><a href="#">variables</a></li>
+                </ul>
+            </div>
+            
             <div class="section" id="ext">
                 <h2>Extensions</h2>
                 <p>This section covers the extensions.</p>
@@ -40,6 +74,9 @@
                     <li><a href="#">epac-with-alz-pol</a></li>
                     <li><a href="#">packer-image-builder</a></li>
                 </ul>
+                <div class="description">
+                    <p>Extensions provide additional functionality to the Azure Fundament. They can be used to deploy and manage specific Azure resources.</p>
+                </div>
             </div>
         </div>
     </div>

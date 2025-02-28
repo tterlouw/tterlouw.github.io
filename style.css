@@ -20,20 +20,45 @@ body {
 h1 {
     text-align: center;
     color: #0078d4; /* Azure Blue */
+    margin-bottom: 20px;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.controls button {
+    background-color: #0078d4;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    margin: 0 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.controls button:hover {
+    background-color: #005a9e;
 }
 
 #infographic {
-    /* Add styles for the infographic content here */
+    position: relative;
+    padding: 20px;
 }
 
 /* Section Styling */
 .section {
-    margin-bottom: 20px;
+    position: relative;
+    margin-bottom: 30px;
     padding: 20px;
     border: 1px solid #0078d4; /* Azure Blue */
     border-radius: 8px;
     background-color: #fff;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
 }
 
 .section h2 {
@@ -50,5 +75,96 @@ h1 {
 }
 
 .section li {
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.section li:hover {
+    background-color: #f0f5fa;
+}
+
+.section a {
+    color: #0078d4;
+    text-decoration: none;
+    display: block;
+    padding: 3px 0;
+}
+
+.section a:hover {
+    text-decoration: underline;
+}
+
+.description {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #f0f5fa;
+    border-radius: 4px;
+    font-style: italic;
+}
+
+/* Interactive Elements */
+.section h2 {
+    cursor: pointer;
+    position: relative;
+    padding-left: 25px;
+}
+
+.section h2::before {
+    content: '▼';
+    position: absolute;
+    left: 0;
+    transition: transform 0.3s;
+}
+
+.section.collapsed h2::before {
+    transform: rotate(-90deg);
+}
+
+.section-content {
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.section.hover {
+    box-shadow: 0 5px 15px rgba(0, 120, 212, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Connection lines */
+.section::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    width: 2px;
+    height: 20px;
+    background-color: #0078d4;
+}
+
+.section:last-child::after {
+    display: none;
+}
+
+/* Specific section styling */
+#azure-fundament {
+    border-width: 2px;
+    background-color: #f0f5fa;
+}
+
+#docs {
+    margin-left: 30px;
+}
+
+#src {
+    margin-left: 30px;
+}
+
+#pipelines {
+    margin-left: 60px;
+}
+
+#ext {
+    margin-left: 30px;
 }
